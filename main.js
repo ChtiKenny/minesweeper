@@ -11,7 +11,7 @@ class Cell {
 }
 
 class Grid {
-  constructor(rows, cols, bombs, size) {
-    this.cells = new Array(rows).fill(new Array(cols));
+  constructor(cols, rows, bombs, size) {
+    this.cells = new Array(cols).fill(new Array(rows));
   }
 }
