@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 class Cell {
   constructor(isBomb) {
     this.bomb = isBomb ? true : false;
@@ -9,15 +11,15 @@ class Cell {
 }
 
 class Grid {
-  constructor(cols, rows, bombs, size) {
+  constructor(cols, rows, bombs) {
     this.cols = cols ? cols : 10;
     this.rows = rows ? rows : 10;
     this.cells = [];
-    this.size = size ? size : 10;
+    this.size = Math.floor(canvas.width / this.cols);
 
-    for (var i = 0; i < cols; i++) {
+    for (var i = 0; i < this.cols; i++) {
       this.cells[i] = [];
-      for (var j = 0; j < rows; j++) {
+      for (var j = 0; j < this.rows; j++) {
         this.cells[i][j] = new Cell();
       }
     }
@@ -41,4 +43,42 @@ class Grid {
     }
     console.log(text);
   }
+
+  draw(){
+    let s = this.size;
+    // erase everything
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0,0,width,height);
+
+    // loop to draw each cell
+    ctx.strokeStyle ='#000000';
+    for (var i = 0; i < this.cols; i++) {
+      for (var j = 0; j < this.rows; j++) {
+        if (this.cells[i][j].revealed) {
+          ctx.fillStyle = '#CCCCCC';
+          ctx.fillRect(i*s, j*s, s, s);
+        } else {
+          ctx.fillStyle = '#AAAAAA';
+          ctx.fillRect(i*s, j*s, s, s);
+        }
+      ctx.strokeRect(i*s, j*s, s, s);
+      }
+    }
+
+  }
 }
+
+var width = 200,
+    height = 200;
+
+var canvas = document.createElement("canvas"),
+    ctx = canvas.getContext("2d");
+canvas.width = width;
+canvas.height = height;
+
+document.body.appendChild(canvas);
+
+
+var grid = new Grid(null, null, null);
+
+grid.draw();
