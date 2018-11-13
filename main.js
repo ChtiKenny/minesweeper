@@ -9,18 +9,22 @@ class Cell {
   reveal(){
     this.revealed = true;
   }
-  click(){
-    if (!this.revealed && !this.flagged) {
-      this.reveal();
-      if (this.bomb) {
-        console.log('GAME OVER');
+  click(rightClick){
+    if (rightClick) {
+      if (!this.revealed) {
+        this.flag();
+      }
+    } else {
+      if (!this.revealed && !this.flagged) {
+        this.reveal();
+        if (this.bomb) {
+          console.log('GAME OVER');
+        }
       }
     }
   }
   flag(){
-    if (!this.revealed) {
-      this.flagged = !this.flagged;
-    }
+    this.flagged = !this.flagged;
   }
 }
 
@@ -109,11 +113,11 @@ canvas.width = width;
 canvas.height = height;
 
 canvas.addEventListener('click', function(e) {
-  grid.getCell(e.offsetX, e.offsetY).click();
+  grid.getCell(e.offsetX, e.offsetY).click(false);
   grid.draw();
 });
 canvas.addEventListener('contextmenu', function(e) {
-  grid.getCell(e.offsetX, e.offsetY).flag();
+  grid.getCell(e.offsetX, e.offsetY).click(true);
   grid.draw();
 
   e.preventDefault();
