@@ -103,10 +103,27 @@ class Grid {
 
   }
   getCell(a, b){
-    var i = Math.floor(a/this.size),
-        j = Math.floor(b/this.size);
+    var x = Math.floor(a/this.size),
+        y = Math.floor(b/this.size);
 
-    return this.cells[i][j];
+    return this.cells[x][y];
+  }
+  setBombs(bombs){
+    var option = [];
+    for (var i = 0; i < this.cols; i++) {
+      for (var j = 0; j < this.rows; j++) {
+        if (!this.cells[i][j].bomb) option.push([i,j]);
+      }
+    }
+
+    console.log(option.length);
+    for (var n = 0; n < bombs; n++) {
+      var index = Math.floor(Math.random() * option.length);
+      var x = option[index][0],
+          y = option[index][1];
+      option.splice(index, 1);
+      this.cells[x][y].bomb = true;
+    }
   }
 }
 
