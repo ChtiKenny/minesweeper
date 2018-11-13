@@ -10,7 +10,7 @@ class Cell {
     this.revealed = true;
   }
   click(){
-    if (!this.revealed) {
+    if (!this.revealed && !this.flagged) {
       this.reveal();
       if (this.bomb) {
         console.log('GAME OVER');
