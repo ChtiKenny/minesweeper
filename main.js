@@ -8,6 +8,14 @@ class Cell {
   reveal(){
     this.revealed = true;
   }
+  click(){
+    if (!this.revealed) {
+      this.reveal();
+      if (this.bomb) {
+        console.log('GAME OVER');
+      }
+    }
+  }
 }
 
 class Grid {
@@ -43,7 +51,6 @@ class Grid {
     }
     console.log(text);
   }
-
   draw(){
     let s = this.size;
     // erase everything
@@ -66,15 +73,33 @@ class Grid {
     }
 
   }
+  getCell(a, b){
+    var i = Math.floor(a/this.size),
+        j = Math.floor(b/this.size);
+
+    return this.cells[i][j];
+  }
 }
 
-var width = 200,
-    height = 200;
+var width = 400,
+    height = 400;
 
 var canvas = document.createElement("canvas"),
     ctx = canvas.getContext("2d");
 canvas.width = width;
 canvas.height = height;
+
+canvas.addEventListener('click', function(e) {
+  console.log(e.offsetX, e.offsetY);
+  console.log(grid.getCell(e.offsetX, e.offsetY));
+  grid.getCell(e.offsetX, e.offsetY).reveal();
+  console.log(grid.getCell(e.offsetX, e.offsetY));
+  grid.draw();
+});
+canvas.addEventListener('contextmenu', function(e) {
+  console.log(e.offsetX, e.offsetY);
+  e.preventDefault();
+});
 
 document.body.appendChild(canvas);
 
