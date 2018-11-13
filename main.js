@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 
 class Cell {
-  constructor(isBomb) {
-    this.bomb = isBomb ? true : false;
+  constructor() {
+    this.bomb = false;
     this.revealed = false;
     this.flagged = false;
   }
@@ -29,9 +29,10 @@ class Cell {
 }
 
 class Grid {
-  constructor(cols, rows, bombs) {
+  constructor(cols, rows, bomb) {
     this.cols = cols ? cols : 10;
     this.rows = rows ? rows : 10;
+    this.bomb = bomb ? bomb : 10;
     this.cells = [];
     this.size = Math.floor(canvas.width / this.cols);
 
@@ -41,6 +42,8 @@ class Grid {
         this.cells[i][j] = new Cell();
       }
     }
+
+    this.setBombs(this.bomb);
 
   }
   log(){
@@ -115,8 +118,7 @@ class Grid {
         if (!this.cells[i][j].bomb) option.push([i,j]);
       }
     }
-
-    console.log(option.length);
+    
     for (var n = 0; n < bombs; n++) {
       var index = Math.floor(Math.random() * option.length);
       var x = option[index][0],
