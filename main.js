@@ -4,6 +4,7 @@ class Cell {
   constructor(isBomb) {
     this.bomb = isBomb ? true : false;
     this.revealed = false;
+    this.flagged = false;
   }
   reveal(){
     this.revealed = true;
@@ -14,6 +15,11 @@ class Cell {
       if (this.bomb) {
         console.log('GAME OVER');
       }
+    }
+  }
+  flag(){
+    if (!this.revealed) {
+      this.flagged = !this.flagged;
     }
   }
 }
@@ -61,12 +67,25 @@ class Grid {
     ctx.strokeStyle ='#000000';
     for (var i = 0; i < this.cols; i++) {
       for (var j = 0; j < this.rows; j++) {
-        if (this.cells[i][j].revealed) {
+        var cell = this.cells[i][j];
+        if (cell.revealed) {
           ctx.fillStyle = '#CCCCCC';
           ctx.fillRect(i*s, j*s, s, s);
         } else {
           ctx.fillStyle = '#AAAAAA';
           ctx.fillRect(i*s, j*s, s, s);
+          if (cell.flagged) {
+            ctx.fillStyle = '#F00';
+            ctx.beginPath();
+            ctx.moveTo((i*s + s/2), (j*s + s/2));
+            ctx.lineTo((i*s + s/2), (j*s + s/5));
+            ctx.lineTo((i*s + s/4), (j*s + s/3));
+            ctx.lineTo((i*s + s/2), (j*s + s/2));
+            ctx.fill();
+            ctx.moveTo((i*s + s/2), (j*s + s/2));
+            ctx.lineTo((i*s + s/2), (j*s + s*2/3));
+            ctx.stroke();
+          }
         }
       ctx.strokeRect(i*s, j*s, s, s);
       }
@@ -90,14 +109,13 @@ canvas.width = width;
 canvas.height = height;
 
 canvas.addEventListener('click', function(e) {
-  console.log(e.offsetX, e.offsetY);
-  console.log(grid.getCell(e.offsetX, e.offsetY));
-  grid.getCell(e.offsetX, e.offsetY).reveal();
-  console.log(grid.getCell(e.offsetX, e.offsetY));
+  grid.getCell(e.offsetX, e.offsetY).click();
   grid.draw();
 });
 canvas.addEventListener('contextmenu', function(e) {
-  console.log(e.offsetX, e.offsetY);
+  grid.getCell(e.offsetX, e.offsetY).flag();
+  grid.draw();
+
   e.preventDefault();
 });
 
