@@ -64,19 +64,25 @@ class Grid {
   draw(){
     let s = this.size;
     // erase everything
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = '#FFF';
     ctx.fillRect(0,0,width,height);
 
     // loop to draw each cell
-    ctx.strokeStyle ='#000000';
+    ctx.strokeStyle ='#000';
     for (var i = 0; i < this.cols; i++) {
       for (var j = 0; j < this.rows; j++) {
         var cell = this.cells[i][j];
         if (cell.revealed) {
-          ctx.fillStyle = '#CCCCCC';
+          ctx.fillStyle = '#CCC';
           ctx.fillRect(i*s, j*s, s, s);
+          if (cell.bomb) {
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(i*s + s/2, j*s + s/2, s/3, 0, Math.PI * 2);
+            ctx.fill();
+          }
         } else {
-          ctx.fillStyle = '#AAAAAA';
+          ctx.fillStyle = '#AAA';
           ctx.fillRect(i*s, j*s, s, s);
           if (cell.flagged) {
             ctx.fillStyle = '#F00';
